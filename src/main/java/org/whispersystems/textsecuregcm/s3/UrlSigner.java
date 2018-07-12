@@ -18,9 +18,11 @@ package org.whispersystems.textsecuregcm.s3;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.S3ClientOptions;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import org.whispersystems.textsecuregcm.configuration.AttachmentsConfiguration;
@@ -34,14 +36,20 @@ public class UrlSigner {
 
   private final AWSCredentials credentials;
   private final String bucket;
+  private final String region;
 
   public UrlSigner(AttachmentsConfiguration config) {
     this.credentials = new BasicAWSCredentials(config.getAccessKey(), config.getAccessSecret());
     this.bucket      = config.getBucket();
+    this.region      = config.getRegion();
   }
 
   public URL getPreSignedUrl(long attachmentId, HttpMethod method, boolean unaccelerated) {
-    AmazonS3                    client  = new AmazonS3Client(credentials);
+    //AmazonS3                    client  = new AmazonS3Client(credentials);
+    AmazonS3                     client = AmazonS3ClientBuilder.standard()
+    															.withCredentials(new AWSStaticCredentialsProvider(credentials))
+    															.withRegion(region).build();
+    
     GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, String.valueOf(attachmentId), method);
     
     request.setExpiration(new Date(System.currentTimeMillis() + DURATION));

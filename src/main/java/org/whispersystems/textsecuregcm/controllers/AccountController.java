@@ -136,7 +136,8 @@ public class AccountController {
     if (testDevices.containsKey(number)) {
       // noop
     } else if (transport.equals("sms")) {
-      smsSender.deliverSmsVerification(number, client, verificationCode.getVerificationCodeDisplay());
+      //Lalo: Comment out
+      //smsSender.deliverSmsVerification(number, client, verificationCode.getVerificationCodeDisplay());
     } else if (transport.equals("voice")) {
       smsSender.deliverVoxVerification(number, verificationCode.getVerificationCodeSpeech());
     }
@@ -345,12 +346,14 @@ public class AccountController {
   }
 
   @VisibleForTesting protected VerificationCode generateVerificationCode(String number) {
-    if (testDevices.containsKey(number)) {
+	//Lalo: Temporary assign 999999 as verification code
+	    return new VerificationCode(999999);
+	/*if (testDevices.containsKey(number)) {
       return new VerificationCode(testDevices.get(number));
     }
 
     SecureRandom random = new SecureRandom();
     int randomInt       = 100000 + random.nextInt(900000);
-    return new VerificationCode(randomInt);
+    return new VerificationCode(randomInt);*/   
   }
 }
