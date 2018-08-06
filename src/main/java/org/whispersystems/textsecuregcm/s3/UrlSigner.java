@@ -45,21 +45,20 @@ public class UrlSigner {
   }
 
   public URL getPreSignedUrl(long attachmentId, HttpMethod method, boolean unaccelerated) {
-    //AmazonS3                    client  = new AmazonS3Client(credentials);
-    AmazonS3                     client = AmazonS3ClientBuilder.standard()
-    															.withCredentials(new AWSStaticCredentialsProvider(credentials))
-    															.withRegion(region).build();
-    
+    AmazonS3                    client  = new AmazonS3Client(credentials);
+
     GeneratePresignedUrlRequest request = new GeneratePresignedUrlRequest(bucket, String.valueOf(attachmentId), method);
     
     request.setExpiration(new Date(System.currentTimeMillis() + DURATION));
     request.setContentType("application/octet-stream");
 
-    if (unaccelerated) {
-      client.setS3ClientOptions(S3ClientOptions.builder().setPathStyleAccess(true).build());
+    /*if (unaccelerated) {
+      client.setS3ClientOptions(S3ClientOptions.builder().setPathStyleAccess(false).build());
     } else {
       client.setS3ClientOptions(S3ClientOptions.builder().setAccelerateModeEnabled(true).build());
-    }
+    }*/
+    //Simple S3, no accelerate at all
+    client.setS3ClientOptions(S3ClientOptions.builder().setPathStyleAccess(false).build());
 
     return client.generatePresignedUrl(request);
   }

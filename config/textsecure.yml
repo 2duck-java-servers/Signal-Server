@@ -1,0 +1,74 @@
+# This is the sample config/textsecure.yml file for the TextSecure Server
+# Pay attention! To start TextSecur server you will need to install and start PushServer
+
+twilio: 
+  accountId: AZ8acwec7fc5eaf209a69f05e50a8b2675 #fake
+  accountToken: 556658d1458f8852ed183a64c40ec5d1 #fake
+  numbers:
+    -
+      +33756796138 #fake
+  localDomain: foo.org
+
+push:
+  host: localhost
+  port: 9090
+  username: 123
+  password: 123
+
+s3:
+   accessKey: ABCDEFGCUFYDHVM2LXXX #fake
+   accessSecret: W0UfGDddfAbqYyCTIIbSQlDtreTGokOs0OTpL0SE #fake
+   attachmentsBucket: thenameofyouts3buket #fake
+
+directory:
+  url: "redis://localhost:6379/0"
+
+cache:
+  url: "redis://localhost:6379/1"
+
+server:
+  applicationConnectors:
+    - type: http
+      port: 8080
+      #keyStorePath: config/example.keystore
+      #keyStorePassword: example
+      #validateCerts: true
+  adminConnectors:
+    - type: http
+      port: 8081
+      #keyStorePath: config/example.keystore
+      #keyStorePassword: example
+      #validateCerts: true
+
+
+websocket:
+  enabled: true
+
+messageStore: # Postgres database configuration for message store
+  driverClass: org.postgresql.Driver
+  user: "signal"
+  password: "khongbiet"
+  url: "jdbc:postgresql://localhost:5432/messagedb"
+
+database:
+  driverClass: org.postgresql.Driver
+  user: "signal"
+  password: "khongbiet"
+  url: "jdbc:postgresql://localhost:5432/accountsdb"
+  properties:
+    charSet: UTF-8
+
+#federation: # is disabled
+
+logging:
+  level: INFO
+  appenders:
+    - type: file
+      currentLogFilename: /tmp/textsecureshserver.log
+      archivedLogFilenamePattern: /temp/textsecureserver-%d.log.gz
+      archivedFileCount: 5
+    - type: console
+
+
+redphone:
+  authKey: 1234567890 #fake
